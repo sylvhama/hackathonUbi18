@@ -41,6 +41,8 @@ class PreloadScene extends Phaser.Scene {
     this.load.audio('validate', 'assets/audio/validate.wav');
   }
   create () {
+    window.addEventListener('resize', resize);
+    resize();
     // FIXME: create preloading screen
     this.scene.start('title');
   }
@@ -55,6 +57,7 @@ class TitleScene extends Phaser.Scene {
   }
   preload () {}
   create () {
+    resize();
     this.sound.add('intro', { volume: 0.2 }, false, false).play();
     this.add.sprite(MAX_WIDTH/2, MAX_HEIGHT/2, 'screenbg');
     var helloText = this.add.text(MAX_WIDTH/4, (MAX_HEIGHT-120), 'Click or tap to play', {
@@ -81,7 +84,6 @@ class GameScene extends Phaser.Scene {
   }
   preload () {}
   create() {
-    window.addEventListener('resize', resize);
     resize();
 
     var self = this;
