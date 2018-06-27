@@ -6,7 +6,7 @@ var io = require('socket.io').listen(server);
 var players = {};
 var star = {
   x: Math.floor(Math.random() * 700) + 50,
-  y: Math.floor(Math.random() * 500) + 50
+  y: Math.floor(Math.random() * 350) + 50
 };
 var scores = {
   blue: 0,
@@ -25,7 +25,7 @@ io.on('connection', function(socket) {
   players[socket.id] = {
     rotation: 0,
     x: Math.floor(Math.random() * 700) + 50,
-    y: Math.floor(Math.random() * 500) + 50,
+    y: Math.floor(Math.random() * 350) + 50,
     playerId: socket.id,
     team: Math.floor(Math.random() * 2) == 0 ? 'red' : 'blue'
   };
@@ -62,7 +62,7 @@ io.on('connection', function(socket) {
       scores.blue += 10;
     }
     star.x = Math.floor(Math.random() * 700) + 50;
-    star.y = Math.floor(Math.random() * 500) + 50;
+    star.y = Math.floor(Math.random() * 350) + 50;
     io.emit('starLocation', star);
     io.emit('scoreUpdate', scores);
   });
