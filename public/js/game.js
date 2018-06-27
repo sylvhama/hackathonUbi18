@@ -1,7 +1,6 @@
 /*
   HELPERS
 */
-
 var MAX_WIDTH = 800;
 var MAX_HEIGHT = 450;
 
@@ -32,7 +31,11 @@ class PreloadScene extends Phaser.Scene {
     super({ key: 'preload' });
   }
   preload () {
-    // FIXME: load some assets
+    this.load.image('ship', 'assets/spaceShips_001.png');
+    this.load.image('otherPlayer', 'assets/enemyBlack5.png');
+    this.load.image('star', 'assets/star_gold.png');
+    this.load.audio('collect', 'assets/collect.wav');
+    this.load.audio('void', 'assets/void.mp3');
   }
   create () {
     // FIXME: create preloading screen
@@ -63,15 +66,12 @@ class GameScene extends Phaser.Scene {
   constructor () {
     super({ key: 'game' });
   }
-  preload () {
-    this.load.image('ship', 'assets/spaceShips_001.png');
-    this.load.image('otherPlayer', 'assets/enemyBlack5.png');
-    this.load.image('star', 'assets/star_gold.png');
-  }
+  preload () {}
   create() {
     window.addEventListener('resize', resize);
     resize();
     var self = this;
+    self.sound.add('void', { volume: 0.2 }).play();
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
     this.socket.on('currentPlayers', function (players) {
@@ -116,6 +116,7 @@ class GameScene extends Phaser.Scene {
       self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
       self.physics.add.overlap(self.ship, self.star, function () {
         this.socket.emit('starCollected');
+        self.sound.add('collect', { volume: 0.2 }).play();
       }, null, self);
     });
   }
