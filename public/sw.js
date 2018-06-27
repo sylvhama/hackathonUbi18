@@ -8,7 +8,7 @@ if (workbox) {
   workbox.precaching.precacheAndRoute([
     '/style.css',
     '/socket.io/socket.io.js',
-    '/phaser/dist/phaser.min.js',
+    '//cdn.jsdelivr.net/npm/phaser@3.3.0/dist/phaser.min.js',
     'js/game.js',
     { url: '/index.html', revision: '123456' }
   ]);
