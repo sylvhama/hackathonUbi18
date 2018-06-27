@@ -34,8 +34,11 @@ class PreloadScene extends Phaser.Scene {
     this.load.image('ship', 'assets/spaceShips_001.png');
     this.load.image('otherPlayer', 'assets/enemyBlack5.png');
     this.load.image('star', 'assets/star_gold.png');
-    this.load.audio('collect', 'assets/collect.wav');
-    this.load.audio('void', 'assets/void.mp3');
+    this.load.image('screenbg', 'assets/screenbg.jpg');
+    this.load.audio('collect', 'assets/audio/collect.wav');
+    this.load.audio('void', 'assets/audio/void.mp3');
+    this.load.audio('intro', 'assets/audio/intro.wav');
+    this.load.audio('validate', 'assets/audio/validate.wav');
   }
   create () {
     // FIXME: create preloading screen
@@ -50,12 +53,22 @@ class TitleScene extends Phaser.Scene {
   constructor () {
     super({ key: 'title' });
   }
-  preload () {
-    // FIXME: load some assets
-  }
+  preload () {}
   create () {
-    // FIXME: create menu
-    this.scene.start('game');
+    this.sound.add('intro', { volume: 0.2 }, false, false).play();
+    this.add.sprite(MAX_WIDTH/2, MAX_HEIGHT/2, 'screenbg');
+    var helloText = this.add.text(MAX_WIDTH/4, (MAX_HEIGHT-120), 'Click or tap to play', {
+      fontSize: '32px',
+      fill: '#988832'
+    });
+    this.input.once('pointerdown', function (event) {
+      this.sound.add('validate', { volume: 0.3 }, false, false).play();
+      // FIXME: figure out how to use transitions...
+      var self = this;
+      setTimeout(function () {
+        self.scene.start('game');
+      }, 1000);
+    }, this);
   }
 }
 
@@ -70,8 +83,13 @@ class GameScene extends Phaser.Scene {
   create() {
     window.addEventListener('resize', resize);
     resize();
+
     var self = this;
-    self.sound.add('void', { volume: 0.2 }).play();
+
+    var bgMusic = self.sound.add('void', { volume: 0.2 });
+    bgMusic.loop = true;
+    bgMusic.play();
+
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
     this.socket.on('currentPlayers', function (players) {
@@ -116,7 +134,7 @@ class GameScene extends Phaser.Scene {
       self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
       self.physics.add.overlap(self.ship, self.star, function () {
         this.socket.emit('starCollected');
-        self.sound.add('collect', { volume: 0.2 }).play();
+        self.sound.add('collect', { volume: 0.2 }, false, false).play();
       }, null, self);
     });
   }
