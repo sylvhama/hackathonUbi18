@@ -70,7 +70,7 @@ class TitleScene extends Phaser.Scene {
       var self = this;
       setTimeout(function () {
         self.scene.start('game');
-      }, 1000);
+      }, 500);
     }, this);
   }
 }
@@ -87,6 +87,15 @@ class GameScene extends Phaser.Scene {
     resize();
 
     var self = this;
+
+    var texture = self.textures.createCanvas('gradient', MAX_WIDTH, MAX_HEIGHT);
+    var grd = texture.context.createLinearGradient(0, 0, MAX_WIDTH, MAX_HEIGHT);
+    grd.addColorStop(0, '#0f0c29');
+    grd.addColorStop(1, '#24243e');
+    texture.context.fillStyle = grd;
+    texture.context.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+    texture.refresh();
+    this.add.image(MAX_WIDTH/2, MAX_HEIGHT/2, 'gradient');
 
     var bgMusic = self.sound.add('void', { volume: 0.2 });
     bgMusic.loop = true;
