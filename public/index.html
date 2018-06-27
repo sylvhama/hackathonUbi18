@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html>
-
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, width=device-width, shrink-to-fit=no">
+        <title>Spice Collector</title>
     </head>
 
     <body>
+        <noscript>
+          You need to enable JavaScript to run this app.
+        </noscript>
+        <div class="container"><div id="root"></div></div>
+        <style type="text/css">
+          body {
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            overflow: hidden;
+          }
+
+          * {
+            box-sizing: border-box;
+          }
+
+          .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        </style>
         <script src="/socket.io/socket.io.js"></script>
         <script src="//cdn.jsdelivr.net/npm/phaser@3.3.0/dist/phaser.min.js"></script>
         <script src="js/game.js"></script>
     </body>
-
 </html>
