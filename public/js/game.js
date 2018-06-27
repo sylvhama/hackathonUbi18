@@ -23,6 +23,10 @@ function resize() {
   }
 }
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 /*
   PRELOAD SCENE
 */
@@ -34,6 +38,7 @@ class PreloadScene extends Phaser.Scene {
     this.load.image('ship', 'assets/spaceShips_001.png');
     this.load.image('otherPlayer', 'assets/enemyBlack5.png');
     this.load.image('star', 'assets/star_gold.png');
+    this.load.image('bgstar', 'assets/star.png');
     this.load.image('screenbg', 'assets/screenbg.jpg');
     this.load.audio('collect', 'assets/audio/collect.wav');
     this.load.audio('void', 'assets/audio/void.mp3');
@@ -62,7 +67,7 @@ class TitleScene extends Phaser.Scene {
     this.add.sprite(MAX_WIDTH/2, MAX_HEIGHT/2, 'screenbg');
     var helloText = this.add.text(MAX_WIDTH/4, (MAX_HEIGHT-120), 'Click or tap to play', {
       fontSize: '32px',
-      fill: '#988832'
+      fill: '#c0a04d'
     });
     this.input.once('pointerdown', function (event) {
       this.sound.add('validate', { volume: 0.3 }, false, false).play();
@@ -88,6 +93,7 @@ class GameScene extends Phaser.Scene {
 
     var self = this;
 
+    // Gradient background
     var texture = self.textures.createCanvas('gradient', MAX_WIDTH, MAX_HEIGHT);
     var grd = texture.context.createLinearGradient(0, 0, MAX_WIDTH, MAX_HEIGHT);
     grd.addColorStop(0, '#0f0c29');
@@ -95,8 +101,14 @@ class GameScene extends Phaser.Scene {
     texture.context.fillStyle = grd;
     texture.context.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
     texture.refresh();
-    this.add.image(MAX_WIDTH/2, MAX_HEIGHT/2, 'gradient');
+    self.add.image(MAX_WIDTH/2, MAX_HEIGHT/2, 'gradient');
 
+    for (var i = 0; i < 10; i++) {
+      var bgstar = self.add.image(getRandomInt(0, 800), getRandomInt(0, 450), 'bgstar');
+      bgstar.alpha = getRandomInt(1, 5)/10;
+    }
+
+    // Ambient music
     var bgMusic = self.sound.add('void', { volume: 0.2 });
     bgMusic.loop = true;
     bgMusic.play();
