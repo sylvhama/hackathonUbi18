@@ -52,5 +52,14 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="//cdn.jsdelivr.net/npm/phaser@3.3.0/dist/phaser.min.js"></script>
         <script src="js/game.js"></script>
+        <script>
+          // Check that service workers are registered
+          if ('serviceWorker' in navigator) {
+            // Use the window load event to keep the page load performant
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('/sw.js');
+            });
+          }
+        </script>
     </body>
 </html>
