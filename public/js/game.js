@@ -1,4 +1,30 @@
 /*
+  HELPERS
+*/
+
+var MAX_WIDTH = 800;
+var MAX_HEIGHT = 450;
+
+function resize() {
+  var canvas = game.canvas,
+    width = window.innerWidth,
+    height = window.innerHeight;
+
+  var wratio = width / height,
+    ratio = canvas.width / canvas.height;
+
+  if (height * ratio > MAX_WIDTH || width / ratio > MAX_HEIGHT) return;
+
+  if (wratio < ratio) {
+    canvas.style.width = width + 'px';
+    canvas.style.height = width / ratio + 'px';
+  } else {
+    canvas.style.width = height * ratio + 'px';
+    canvas.style.height = height + 'px';
+  }
+}
+
+/*
   PRELOAD SCENE
 */
 class PreloadScene extends Phaser.Scene {
@@ -43,6 +69,8 @@ class GameScene extends Phaser.Scene {
     this.load.image('star', 'assets/star_gold.png');
   }
   create() {
+    window.addEventListener('resize', resize);
+    resize();
     var self = this;
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
@@ -152,9 +180,9 @@ class GameScene extends Phaser.Scene {
 
 var config = {
   type: Phaser.AUTO,
-  parent: 'phaser-example',
-  width: 800,
-  height: 600,
+  parent: 'root',
+  width: MAX_WIDTH,
+  height: MAX_HEIGHT,
   physics: {
     default: 'arcade',
     arcade: {
