@@ -15,7 +15,7 @@
     ],
     "theme_color": "#c0a04d",
     "background_color": "#c0a04d",
-    "start_url": "https://hackubi18.herokuapp.com/",
+    "start_url": "/",
     "display": "standalone",
     "orientation": "landscape"
 }
