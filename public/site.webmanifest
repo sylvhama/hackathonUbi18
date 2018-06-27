@@ -1,0 +1,21 @@
+{
+    "name": "Spice Collector",
+    "short_name": "Spice Collector",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png?v=47Mdn3YJJg",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-256x256.png?v=47Mdn3YJJg",
+            "sizes": "256x256",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#c0a04d",
+    "background_color": "#c0a04d",
+    "start_url": "https://hackubi18.herokuapp.com/",
+    "display": "standalone",
+    "orientation": "landscape"
+}
