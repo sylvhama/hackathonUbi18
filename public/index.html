@@ -22,6 +22,7 @@
         <meta name="twitter:title" content="Spice Collector">
         <meta name="twitter:description" content="Multiplayer cross-platform game in your web browser!">
         <meta name="twitter:image" content="https://hackubi18.herokuapp.com/og-image.jpg">
+        <link rel="stylesheet" type="text/css" href="style.css">
     </head>
 
     <body>
@@ -29,12 +30,14 @@
           You need to enable JavaScript to run this app.
         </noscript>
         <div class="container"><div id="root"></div></div>
+        <div class="landscape">↪️ Please use in landscape mode! ↪️</div>
         <style type="text/css">
           body {
             margin: 0;
             padding: 0;
             background-color: #333;
             overflow: hidden;
+            color: #fff;
           }
 
           * {
@@ -47,6 +50,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
+          }
+
+          .landscape{
+            display: none;
           }
         </style>
         <script src="/socket.io/socket.io.js"></script>
