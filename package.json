@@ -1,15 +1,16 @@
 {
-  "name": "phaser_tut2",
+  "name": "spice-collector",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "author": "Scott Westover",
+  "author": "Cool people from Ubisoft Club",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
+    "phaser": "^3.10.1",
     "socket.io": "^2.1.0"
   },
   "engines": {
