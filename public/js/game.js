@@ -3,11 +3,11 @@ var MAX_HEIGHT = 450;
 
 var config = {
   type: Phaser.AUTO,
-  parent: 'root',
+  parent: "root",
   width: MAX_WIDTH,
   height: MAX_HEIGHT,
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       debug: false,
       gravity: { y: 0 }
@@ -33,27 +33,30 @@ function resize() {
   if (height * ratio > MAX_WIDTH || width / ratio > MAX_HEIGHT) return;
 
   if (wratio < ratio) {
-    canvas.style.width = width + 'px';
-    canvas.style.height = width / ratio + 'px';
+    canvas.style.width = width + "px";
+    canvas.style.height = width / ratio + "px";
   } else {
-    canvas.style.width = height * ratio + 'px';
-    canvas.style.height = height + 'px';
+    canvas.style.width = height * ratio + "px";
+    canvas.style.height = height + "px";
   }
 }
 
 function preload() {
-  this.load.image('ship', 'assets/spaceShips_001.png');
-  this.load.image('otherPlayer', 'assets/enemyBlack5.png');
-  this.load.image('star', 'assets/star_gold.png');
+  this.load.image("ship", "assets/spaceShips_001.png");
+  this.load.image("otherPlayer", "assets/enemyBlack5.png");
+  this.load.image("star", "assets/star_gold.png");
+  this.load.image("upBtn", "assets/up_arrow.png");
+  this.load.image("leftBtn", "assets/left_arrow.png");
+  this.load.image("rightBtn", "assets/right_arrow.png");
 }
 
 function create() {
-  window.addEventListener('resize', resize);
+  window.addEventListener("resize", resize);
   resize();
   var self = this;
   this.socket = io();
   this.otherPlayers = this.physics.add.group();
-  this.socket.on('currentPlayers', function(players) {
+  this.socket.on("currentPlayers", function(players) {
     Object.keys(players).forEach(function(id) {
       if (players[id].playerId === self.socket.id) {
         addPlayer(self, players[id]);
@@ -62,17 +65,17 @@ function create() {
       }
     });
   });
-  this.socket.on('newPlayer', function(playerInfo) {
+  this.socket.on("newPlayer", function(playerInfo) {
     addOtherPlayers(self, playerInfo);
   });
-  this.socket.on('disconnect', function(playerId) {
+  this.socket.on("disconnect", function(playerId) {
     self.otherPlayers.getChildren().forEach(function(otherPlayer) {
       if (playerId === otherPlayer.playerId) {
         otherPlayer.destroy();
       }
     });
   });
-  this.socket.on('playerMoved', function(playerInfo) {
+  this.socket.on("playerMoved", function(playerInfo) {
     self.otherPlayers.getChildren().forEach(function(otherPlayer) {
       if (playerInfo.playerId === otherPlayer.playerId) {
         otherPlayer.setRotation(playerInfo.rotation);
@@ -80,30 +83,46 @@ function create() {
       }
     });
   });
-  this.cursors = this.input.keyboard.createCursorKeys();
 
-  this.blueScoreText = this.add.text(16, 16, '', {
-    fontSize: '32px',
-    fill: '#0000FF'
+  if (!this.sys.game.device.os.desktop)
+    this.cursors = this.input.keyboard.createCursorKeys();
+  else {
+    this.upButton = this.add
+      .image(700, 350, "upBtn")
+      .setInteractive()
+      .setScale(2);
+    this.leftButton = this.add
+      .image(650, 400, "leftBtn")
+      .setInteractive()
+      .setScale(2);
+    this.rightButton = this.add
+      .image(750, 400, "rightBtn")
+      .setInteractive()
+      .setScale(2);
+  }
+
+  this.blueScoreText = this.add.text(16, 16, "", {
+    fontSize: "32px",
+    fill: "#0000FF"
   });
-  this.redScoreText = this.add.text(584, 16, '', {
-    fontSize: '32px',
-    fill: '#FF0000'
+  this.redScoreText = this.add.text(584, 16, "", {
+    fontSize: "32px",
+    fill: "#FF0000"
   });
 
-  this.socket.on('scoreUpdate', function(scores) {
-    self.blueScoreText.setText('Blue: ' + scores.blue);
-    self.redScoreText.setText('Red: ' + scores.red);
+  this.socket.on("scoreUpdate", function(scores) {
+    self.blueScoreText.setText("Blue: " + scores.blue);
+    self.redScoreText.setText("Red: " + scores.red);
   });
 
-  this.socket.on('starLocation', function(starLocation) {
+  this.socket.on("starLocation", function(starLocation) {
     if (self.star) self.star.destroy();
-    self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
+    self.star = self.physics.add.image(starLocation.x, starLocation.y, "star");
     self.physics.add.overlap(
       self.ship,
       self.star,
       function() {
-        this.socket.emit('starCollected');
+        this.socket.emit("starCollected");
       },
       null,
       self
@@ -113,10 +132,10 @@ function create() {
 
 function addPlayer(self, playerInfo) {
   self.ship = self.physics.add
-    .image(playerInfo.x, playerInfo.y, 'ship')
+    .image(playerInfo.x, playerInfo.y, "ship")
     .setOrigin(0.5, 0.5)
     .setDisplaySize(53, 40);
-  if (playerInfo.team === 'blue') {
+  if (playerInfo.team === "blue") {
     self.ship.setTint(0x0000ff);
   } else {
     self.ship.setTint(0xff0000);
@@ -128,10 +147,10 @@ function addPlayer(self, playerInfo) {
 
 function addOtherPlayers(self, playerInfo) {
   const otherPlayer = self.add
-    .sprite(playerInfo.x, playerInfo.y, 'otherPlayer')
+    .sprite(playerInfo.x, playerInfo.y, "otherPlayer")
     .setOrigin(0.5, 0.5)
     .setDisplaySize(53, 40);
-  if (playerInfo.team === 'blue') {
+  if (playerInfo.team === "blue") {
     otherPlayer.setTint(0x0000ff);
   } else {
     otherPlayer.setTint(0xff0000);
@@ -142,22 +161,41 @@ function addOtherPlayers(self, playerInfo) {
 
 function update() {
   if (this.ship) {
-    if (this.cursors.left.isDown) {
-      this.ship.setAngularVelocity(-150);
-    } else if (this.cursors.right.isDown) {
-      this.ship.setAngularVelocity(150);
-    } else {
-      this.ship.setAngularVelocity(0);
-    }
+    if (!this.sys.game.device.os.desktop) {
+      if (this.cursors.left.isDown) {
+        this.ship.setAngularVelocity(-150);
+      } else if (this.cursors.right.isDown) {
+        this.ship.setAngularVelocity(150);
+      } else {
+        this.ship.setAngularVelocity(0);
+      }
 
-    if (this.cursors.up.isDown) {
-      this.physics.velocityFromRotation(
-        this.ship.rotation + 1.5,
-        100,
-        this.ship.body.acceleration
-      );
+      if (this.cursors.up.isDown) {
+        this.physics.velocityFromRotation(
+          this.ship.rotation + 1.5,
+          100,
+          this.ship.body.acceleration
+        );
+      } else {
+        this.ship.setAcceleration(0);
+      }
     } else {
-      this.ship.setAcceleration(0);
+      if (this.leftBtn) {
+        this.ship.setAngularVelocity(-150);
+      } else if (this.rightBtn) {
+        this.ship.setAngularVelocity(150);
+      } else {
+        this.ship.setAngularVelocity(0);
+      }
+      if (this.upBtn) {
+        this.physics.velocityFromRotation(
+          this.ship.rotation + 1.5,
+          100,
+          this.ship.body.acceleration
+        );
+      } else {
+        this.ship.setAcceleration(0);
+      }
     }
 
     this.physics.world.wrap(this.ship, 5);
@@ -172,7 +210,7 @@ function update() {
         y !== this.ship.oldPosition.y ||
         r !== this.ship.oldPosition.rotation)
     ) {
-      this.socket.emit('playerMovement', {
+      this.socket.emit("playerMovement", {
         x: this.ship.x,
         y: this.ship.y,
         rotation: this.ship.rotation
