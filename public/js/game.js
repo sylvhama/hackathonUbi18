@@ -44,12 +44,55 @@ class PreloadScene extends Phaser.Scene {
     this.load.audio('void', 'assets/audio/void.mp3');
     this.load.audio('intro', 'assets/audio/intro.wav');
     this.load.audio('validate', 'assets/audio/validate.wav');
+
+    var progressBar = this.add.graphics();
+    var progressBox = this.add.graphics();
+    progressBox.fillStyle(0x333333, 0.5);
+    progressBox.fillRect(240, 270, 320, 50);
+
+    var width = MAX_WIDTH;
+    var height = MAX_HEIGHT;
+    var loadingText = this.make.text({
+      x: width/2,
+      y: height/2,
+      text: 'Loading...',
+      style: {
+        font: '20px monospace',
+        fill: '#c0a04d'
+      }
+    });
+    loadingText.setOrigin(0.5, 0.5);
+
+    var percentText = this.make.text({
+      x: width/2,
+      y: height/2 + 70,
+      text: '0%',
+      style: {
+        font: '18px monospace',
+        fill: '#fff'
+      }
+    });
+    percentText.setOrigin(0.5, 0.5);
+
+    this.load.on('progress', function (value) {
+      percentText.setText(parseInt(value * 100) + '%');
+      progressBar.clear();
+      progressBar.fillStyle(0xc0a04d, 1);
+      progressBar.fillRect(250, 280, 300 * value, 30);
+    });
+
+    var self = this;
+    this.load.on('complete', function () {
+      progressBar.destroy();
+      progressBox.destroy();
+      loadingText.destroy();
+      percentText.destroy();
+      self.scene.start('title');
+    });
   }
   create () {
     window.addEventListener('resize', resize);
     resize();
-    // FIXME: create preloading screen
-    this.scene.start('title');
   }
 }
 
