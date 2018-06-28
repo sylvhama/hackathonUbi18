@@ -204,6 +204,15 @@ class GameScene extends Phaser.Scene {
         up: { isDown: false }
       };
 
+      this.input.on("pointerup", function() {
+        self.cursors.up.isDown = false;
+        self.upButton.setAlpha(0.5);
+        self.cursors.left.isDown = false;
+        self.leftButton.setAlpha(0.5);
+        self.cursors.right.isDown = false;
+        self.rightButton.setAlpha(0.5);
+      });
+
       this.upButton = this.add
         .image(750, 400, "upBtn")
         .setOrigin(0.5, 0.5)
@@ -261,11 +270,22 @@ class GameScene extends Phaser.Scene {
 
     this.socket.on("starLocation", function(starLocation) {
       if (self.star) self.star.destroy();
-      self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-      self.physics.add.overlap(self.ship, self.star, function () {
-        this.socket.emit('starCollected');
-        self.sound.add('collect', { volume: 0.2 }, false, false).play();
-      }, null, self);
+      self.star = self.physics.add.image(
+        starLocation.x,
+        starLocation.y,
+        "star"
+      );
+      self.physics.add.overlap(
+        self.ship,
+        self.star,
+        function() {
+          self.star.destroy();
+          this.socket.emit("starCollected");
+          self.sound.add("collect", { volume: 0.2 }, false, false).play();
+        },
+        null,
+        self
+      );
     });
   }
 
