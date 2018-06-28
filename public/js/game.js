@@ -38,19 +38,19 @@ class PreloadScene extends Phaser.Scene {
     window.addEventListener("resize", resize);
     resize();
 
-    this.load.image('ship', 'assets/spaceShips_001.png');
-    this.load.image('otherPlayer', 'assets/enemyBlack5.png');
-    this.load.image('star', 'assets/star_gold.png');
-    this.load.image('titlebg', 'assets/screenbg.jpg');
-    this.load.image('gamebg', 'assets/gamebg.jpg');
-    this.load.image('upBtn', 'assets/rocket.png');
-    this.load.image('leftBtn', 'assets/left_arrow.png');
-    this.load.image('rightBtn', 'assets/right_arrow.png');
-    this.load.audio('collect', 'assets/audio/collect.mp3');
-    this.load.audio('void', 'assets/audio/void.mp3');
-    this.load.audio('intro', 'assets/audio/intro.mp3');
-    this.load.audio('validate', 'assets/audio/validate.mp3');
-    this.load.audio('engine', 'assets/audio/engine.mp3');
+    this.load.image("ship", "assets/playership.png");
+    this.load.image("otherPlayer", "assets/enemyship.png");
+    this.load.image("star", "assets/spice.png");
+    this.load.image("titlebg", "assets/screenbg.jpg");
+    this.load.image("gamebg", "assets/gamebg.jpg");
+    this.load.image("upBtn", "assets/control-forward.png");
+    this.load.image("leftBtn", "assets/control-left.png");
+    this.load.image("rightBtn", "assets/control-right.png");
+    this.load.audio("collect", "assets/audio/collect.mp3");
+    this.load.audio("void", "assets/audio/void.mp3");
+    this.load.audio("intro", "assets/audio/intro.mp3");
+    this.load.audio("validate", "assets/audio/validate.mp3");
+    this.load.audio("engine", "assets/audio/engine.mp3");
 
     var progressBar = this.add.graphics();
     var progressBox = this.add.graphics();
@@ -204,44 +204,83 @@ class GameScene extends Phaser.Scene {
         up: { isDown: false }
       };
 
+      this.input.on("pointerup", function() {
+        if (!self.input.pointer1.isDown && !self.input.pointer2.isDown) {
+          self.cursors.up.isDown = false;
+          self.upButton.setAlpha(0.5);
+          self.cursors.left.isDown = false;
+          self.leftButton.setAlpha(0.5);
+          self.cursors.right.isDown = false;
+          self.rightButton.setAlpha(0.5);
+        } else if (!self.input.pointer1.isDown) {
+          if (self.cursors.up.isPointer1) {
+            self.cursors.up.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+          if (self.cursors.left.isPointer1) {
+            self.cursors.left.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+          if (self.cursors.right.isPointer1) {
+            self.cursors.right.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+        } else {
+          if (!self.cursors.up.isPointer1) {
+            self.cursors.up.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+          if (!self.cursors.left.isPointer1) {
+            self.cursors.left.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+          if (!self.cursors.right.isPointer1) {
+            self.cursors.right.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+        }
+      });
+
       this.upButton = this.add
         .image(750, 400, "upBtn")
         .setOrigin(0.5, 0.5)
         .setAlpha(0.5)
         .setInteractive()
-        .on("pointerdown", function() {
-          self.cursors.up.isDown = true;
+        .on("pointerdown", function(e) {
+          self.cursors.up = {
+            isDown: true,
+            isPointer1:
+              self.input.pointer1.isDown && !self.input.pointer2.isDown
+          };
           self.upButton.setAlpha(0.8);
-        })
-        .on("pointerup", function() {
-          self.cursors.up.isDown = false;
-          self.upButton.setAlpha(0.5);
         });
+
       this.leftButton = this.add
         .image(50, 400, "leftBtn")
         .setOrigin(0.5, 0.5)
         .setAlpha(0.5)
         .setInteractive()
         .on("pointerdown", function() {
-          self.cursors.left.isDown = true;
+          self.cursors.left = {
+            isDown: true,
+            isPointer1:
+              self.input.pointer1.isDown && !self.input.pointer2.isDown
+          };
           self.leftButton.setAlpha(0.8);
-        })
-        .on("pointerup", function() {
-          self.cursors.left.isDown = false;
-          self.leftButton.setAlpha(0.5);
         });
+
       this.rightButton = this.add
         .image(125, 400, "rightBtn")
         .setOrigin(0.5, 0.5)
         .setAlpha(0.5)
         .setInteractive()
         .on("pointerdown", function() {
-          self.cursors.right.isDown = true;
+          self.cursors.right = {
+            isDown: true,
+            isPointer1:
+              self.input.pointer1.isDown && !self.input.pointer2.isDown
+          };
           self.rightButton.setAlpha(0.8);
-        })
-        .on("pointerup", function() {
-          self.cursors.right.isDown = false;
-          self.rightButton.setAlpha(0.5);
         });
     }
 
@@ -261,12 +300,22 @@ class GameScene extends Phaser.Scene {
 
     this.socket.on("starLocation", function(starLocation) {
       if (self.star) self.star.destroy();
-      self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-      self.physics.add.overlap(self.ship, self.star, function () {
-        self.star.destroy();
-        this.socket.emit('starCollected');
-        self.sound.add('collect', { volume: 0.2 }, false, false).play();
-      }, null, self);
+      self.star = self.physics.add.image(
+        starLocation.x,
+        starLocation.y,
+        "star"
+      );
+      self.physics.add.overlap(
+        self.ship,
+        self.star,
+        function() {
+          self.star.destroy();
+          this.socket.emit("starCollected");
+          self.sound.add("collect", { volume: 0.2 }, false, false).play();
+        },
+        null,
+        self
+      );
     });
   }
 
