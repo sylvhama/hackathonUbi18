@@ -38,9 +38,9 @@ class PreloadScene extends Phaser.Scene {
     window.addEventListener("resize", resize);
     resize();
 
-    this.load.image('ship', 'assets/spaceShips_001.png');
-    this.load.image('otherPlayer', 'assets/enemyBlack5.png');
-    this.load.image('star', 'assets/star_gold.png');
+    this.load.image('ship', 'assets/playership.png');
+    this.load.image('otherPlayer', 'assets/enemyship.png');
+    this.load.image('star', 'assets/spice.png');
     this.load.image('titlebg', 'assets/screenbg.jpg');
     this.load.image('gamebg', 'assets/gamebg.jpg');
     this.load.image('upBtn', 'assets/rocket.png');
