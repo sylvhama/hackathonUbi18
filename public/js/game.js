@@ -46,6 +46,8 @@ class PreloadScene extends Phaser.Scene {
     this.load.image("upBtn", "assets/control-forward.png");
     this.load.image("leftBtn", "assets/control-left.png");
     this.load.image("rightBtn", "assets/control-right.png");
+    this.load.image("blueBanner", "assets/banner-blue-team.png");
+    this.load.image("redBanner", "assets/banner-red-team.png");
     this.load.audio("collect", "assets/audio/collect.mp3");
     this.load.audio("void", "assets/audio/void.mp3");
     this.load.audio("intro", "assets/audio/intro.mp3");
@@ -284,18 +286,31 @@ class GameScene extends Phaser.Scene {
         });
     }
 
-    this.blueScoreText = this.add.text(16, 16, "", {
-      fontSize: "32px",
-      fill: "#0000FF"
+    // Team logo
+    this.blueBanner = this.add.image(25, 30, "blueBanner");
+    this.redBanner = this.add.image(650, 30, "redBanner");
+
+    this.blueTeamName = this.add.text(40, 10, "House Arteidus", {
+      fontSize: "18px",
+      fill: "#5292CC"
     });
-    this.redScoreText = this.add.text(584, 16, "", {
-      fontSize: "32px",
-      fill: "#FF0000"
+    this.redTeamName = this.add.text(665, 10, "House Harkonnan", {
+      fontSize: "18px",
+      fill: "#D65858"
+    });
+
+    this.blueScoreText = this.add.text(40, 26, " ", {
+      fontSize: "24px",
+      fill: "#FFFFFF"
+    });
+    this.redScoreText = this.add.text(665, 26, " ", {
+      fontSize: "24px",
+      fill: "#FFFFFF"
     });
 
     this.socket.on("scoreUpdate", function(scores) {
-      self.blueScoreText.setText("Blue: " + scores.blue);
-      self.redScoreText.setText("Red: " + scores.red);
+      self.blueScoreText.setText(scores.blue);
+      self.redScoreText.setText(scores.red);
     });
 
     this.socket.on("starLocation", function(starLocation) {
