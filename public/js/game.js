@@ -359,9 +359,9 @@ class GameScene extends Phaser.Scene {
       .setOrigin(0.5, 0.5)
       .setDisplaySize(53, 40);
     if (playerInfo.team === "blue") {
-      otherPlayer.setTint(0x0000ff);
+      otherPlayer.setTint(0x5292cc);
     } else {
-      otherPlayer.setTint(0xff0000);
+      otherPlayer.setTint(0xd65858);
     }
     otherPlayer.playerId = playerInfo.playerId;
     self.otherPlayers.add(otherPlayer);
