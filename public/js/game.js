@@ -49,7 +49,7 @@ class PreloadScene extends Phaser.Scene {
     this.load.image("rightBtn", "assets/right_arrow.png");
 
     var progressBar = this.add.graphics();
-    var progressBox = tgit shis.add.graphics();
+    var progressBox = this.add.graphics();
     progressBox.fillStyle(0x333333, 0.5);
     progressBox.fillRect(240, 270, 320, 50);
 
