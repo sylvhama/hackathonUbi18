@@ -4,6 +4,25 @@
         <meta charset="utf-8">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, width=device-width, shrink-to-fit=no">
         <title>Spice Collector</title>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=47Mdn3YJJg">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=47Mdn3YJJg">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=47Mdn3YJJg">
+        <link rel="manifest" href="/site.webmanifest?v=47Mdn3YJJg">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg?v=47Mdn3YJJg" color="#c0a04d">
+        <link rel="shortcut icon" href="/favicon.ico?v=47Mdn3YJJg">
+        <meta name="msapplication-TileColor" content="#c0a04d">
+        <meta name="theme-color" content="#c0a04d">
+        <meta property="og:image:width" content="1415">
+        <meta property="og:image:height" content="741">
+        <meta property="og:description" content="Multiplayer cross-platform game in your web browser!">
+        <meta property="og:title" content="Spice Collector">
+        <meta property="og:url" content="https://hackubi18.herokuapp.com">
+        <meta property="og:image" content="https://hackubi18.herokuapp.com/og-image.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Spice Collector">
+        <meta name="twitter:description" content="Multiplayer cross-platform game in your web browser!">
+        <meta name="twitter:image" content="https://hackubi18.herokuapp.com/og-image.jpg">
+        <link rel="stylesheet" type="text/css" href="style.css">
     </head>
 
     <body>
@@ -11,12 +30,14 @@
           You need to enable JavaScript to run this app.
         </noscript>
         <div class="container"><div id="root"></div></div>
+        <div class="landscape">↪️ Please use in landscape mode! ↪️</div>
         <style type="text/css">
           body {
             margin: 0;
             padding: 0;
             background-color: #333;
             overflow: hidden;
+            color: #fff;
           }
 
           * {
@@ -30,9 +51,22 @@
             justify-content: center;
             align-items: center;
           }
+
+          .landscape{
+            display: none;
+          }
         </style>
         <script src="/socket.io/socket.io.js"></script>
         <script src="//cdn.jsdelivr.net/npm/phaser@3.3.0/dist/phaser.min.js"></script>
         <script src="js/game.js"></script>
+        <script>
+          // Check that service workers are registered
+          if ('serviceWorker' in navigator) {
+            // Use the window load event to keep the page load performant
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('/sw.js');
+            });
+          }
+        </script>
     </body>
 </html>
