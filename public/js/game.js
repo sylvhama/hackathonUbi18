@@ -35,6 +35,9 @@ class PreloadScene extends Phaser.Scene {
     super({ key: 'preload' });
   }
   preload () {
+    window.addEventListener('resize', resize);
+    resize();
+
     this.load.image('ship', 'assets/spaceShips_001.png');
     this.load.image('otherPlayer', 'assets/enemyBlack5.png');
     this.load.image('star', 'assets/star_gold.png');
@@ -94,10 +97,7 @@ class PreloadScene extends Phaser.Scene {
       self.scene.start('title');
     });
   }
-  create () {
-    window.addEventListener('resize', resize);
-    resize();
-  }
+  create () {}
 }
 
 /*
