@@ -46,11 +46,11 @@ class PreloadScene extends Phaser.Scene {
     this.load.image('upBtn', 'assets/rocket.png');
     this.load.image('leftBtn', 'assets/left_arrow.png');
     this.load.image('rightBtn', 'assets/right_arrow.png');
-    this.load.audio('collect', 'assets/audio/collect.wav');
+    this.load.audio('collect', 'assets/audio/collect.mp3');
     this.load.audio('void', 'assets/audio/void.mp3');
-    this.load.audio('intro', 'assets/audio/intro.wav');
-    this.load.audio('validate', 'assets/audio/validate.wav');
-    this.load.audio('engine', 'assets/audio/engine.wav');
+    this.load.audio('intro', 'assets/audio/intro.mp3');
+    this.load.audio('validate', 'assets/audio/validate.mp3');
+    this.load.audio('engine', 'assets/audio/engine.mp3');
 
     var progressBar = this.add.graphics();
     var progressBox = this.add.graphics();
@@ -60,41 +60,41 @@ class PreloadScene extends Phaser.Scene {
     var width = MAX_WIDTH;
     var height = MAX_HEIGHT;
     var loadingText = this.make.text({
-      x: width/2,
-      y: height/2,
-      text: 'Loading...',
+      x: width / 2,
+      y: height / 2,
+      text: "Loading...",
       style: {
-        font: '20px monospace',
-        fill: '#c0a04d'
+        font: "20px monospace",
+        fill: "#c0a04d"
       }
     });
     loadingText.setOrigin(0.5, 0.5);
 
     var percentText = this.make.text({
-      x: width/2,
-      y: height/2 + 70,
-      text: '0%',
+      x: width / 2,
+      y: height / 2 + 70,
+      text: "0%",
       style: {
-        font: '18px monospace',
-        fill: '#fff'
+        font: "18px monospace",
+        fill: "#fff"
       }
     });
     percentText.setOrigin(0.5, 0.5);
 
-    this.load.on('progress', function (value) {
-      percentText.setText(parseInt(value * 100) + '%');
+    this.load.on("progress", function(value) {
+      percentText.setText(parseInt(value * 100) + "%");
       progressBar.clear();
       progressBar.fillStyle(0xc0a04d, 1);
       progressBar.fillRect(250, 280, 300 * value, 30);
     });
 
     var self = this;
-    this.load.on('complete', function () {
+    this.load.on("complete", function() {
       progressBar.destroy();
       progressBox.destroy();
       loadingText.destroy();
       percentText.destroy();
-      self.scene.start('title');
+      self.scene.start("title");
     });
   }
   create () {}
@@ -107,8 +107,8 @@ class TitleScene extends Phaser.Scene {
   constructor() {
     super({ key: 'title' });
   }
-  preload () {}
-  create () {
+  preload() {}
+  create() {
     resize();
     this.sound.add('intro', { volume: 0.2 }, false, false).play();
     this.add.sprite(MAX_WIDTH/2, MAX_HEIGHT/2, 'titlebg');
@@ -142,7 +142,7 @@ class GameScene extends Phaser.Scene {
     self.add.image(MAX_WIDTH/2, MAX_HEIGHT/2, 'gamebg')
 
     // Ambient music
-    var bgMusic = self.sound.add('void', { volume: 0.2 });
+    var bgMusic = self.sound.add("void", { volume: 0.2 });
     bgMusic.loop = true;
     bgMusic.play();
 
@@ -177,9 +177,18 @@ class GameScene extends Phaser.Scene {
     });
 
     // If it's not desktop we need to add virtual controlling button
-    if (this.sys.game.device.os.desktop)
+    // Adding !iPhone && !iPad because it seems that desktop=true
+    // when device is iPhone or iPad
+    if (
+      this.sys.game.device.os.desktop &&
+      !this.sys.game.device.os.iPhone &&
+      !this.sys.game.device.os.iPad
+    ) {
       this.cursors = this.input.keyboard.createCursorKeys();
-    else {
+    } else {
+      // Add one more pointer for multitouch (basically we need 2)
+      this.input.addPointer(1);
+
       this.cursors = {
         left: { isDown: false },
         right: { isDown: false },
