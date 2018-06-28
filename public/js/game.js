@@ -301,12 +301,12 @@ class GameScene extends Phaser.Scene {
       fill: "#D65858"
     });
 
-    this.blueScoreText = this.add.text(50, 25, " ", {
+    this.blueScoreText = this.add.text(50, 29, " ", {
       fontSize: "24px",
       fontFamily: "Oswald",
       fill: "#FFFFFF"
     });
-    this.redScoreText = this.add.text(675, 25, " ", {
+    this.redScoreText = this.add.text(675, 29, " ", {
       fontSize: "24px",
       fontFamily: "Oswald",
       fill: "#FFFFFF"
