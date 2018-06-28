@@ -34,22 +34,22 @@ class PreloadScene extends Phaser.Scene {
   constructor() {
     super({ key: "preload" });
   }
-  preload () {
-    this.load.image('ship', 'assets/spaceShips_001.png');
-    this.load.image('otherPlayer', 'assets/enemyBlack5.png');
-    this.load.image('star', 'assets/star_gold.png');
-    this.load.image('bgstar', 'assets/star.png');
-    this.load.image('screenbg', 'assets/screenbg.jpg');
-    this.load.audio('collect', 'assets/audio/collect.wav');
-    this.load.audio('void', 'assets/audio/void.mp3');
-    this.load.audio('intro', 'assets/audio/intro.wav');
-    this.load.audio('validate', 'assets/audio/validate.wav');
+  preload() {
+    this.load.image("ship", "assets/spaceShips_001.png");
+    this.load.image("otherPlayer", "assets/enemyBlack5.png");
+    this.load.image("star", "assets/star_gold.png");
+    this.load.image("bgstar", "assets/star.png");
+    this.load.image("screenbg", "assets/screenbg.jpg");
+    this.load.audio("collect", "assets/audio/collect.wav");
+    this.load.audio("void", "assets/audio/void.mp3");
+    this.load.audio("intro", "assets/audio/intro.wav");
+    this.load.audio("validate", "assets/audio/validate.wav");
     this.load.image("upBtn", "assets/rocket.png");
     this.load.image("leftBtn", "assets/left_arrow.png");
     this.load.image("rightBtn", "assets/right_arrow.png");
   }
-  create () {
-    window.addEventListener('resize', resize);
+  create() {
+    window.addEventListener("resize", resize);
     resize();
     // FIXME: create preloading screen
     this.scene.start("title");
@@ -63,23 +63,32 @@ class TitleScene extends Phaser.Scene {
   constructor() {
     super({ key: "title" });
   }
-  preload () {}
-  create () {
+  preload() {}
+  create() {
     resize();
-    this.sound.add('intro', { volume: 0.2 }, false, false).play();
-    this.add.sprite(MAX_WIDTH/2, MAX_HEIGHT/2, 'screenbg');
-    var helloText = this.add.text(MAX_WIDTH/4, (MAX_HEIGHT-120), 'Click or tap to play', {
-      fontSize: '32px',
-      fill: '#c0a04d'
-    });
-    this.input.once('pointerdown', function (event) {
-      this.sound.add('validate', { volume: 0.3 }, false, false).play();
-      // FIXME: figure out how to use transitions...
-      var self = this;
-      setTimeout(function () {
-        self.scene.start('game');
-      }, 500);
-    }, this);
+    this.sound.add("intro", { volume: 0.2 }, false, false).play();
+    this.add.sprite(MAX_WIDTH / 2, MAX_HEIGHT / 2, "screenbg");
+    var helloText = this.add.text(
+      MAX_WIDTH / 4,
+      MAX_HEIGHT - 120,
+      "Click or tap to play",
+      {
+        fontSize: "32px",
+        fill: "#c0a04d"
+      }
+    );
+    this.input.once(
+      "pointerdown",
+      function(event) {
+        this.sound.add("validate", { volume: 0.3 }, false, false).play();
+        // FIXME: figure out how to use transitions...
+        var self = this;
+        setTimeout(function() {
+          self.scene.start("game");
+        }, 500);
+      },
+      this
+    );
   }
 }
 
@@ -97,22 +106,26 @@ class GameScene extends Phaser.Scene {
     var self = this;
 
     // Gradient background
-    var texture = self.textures.createCanvas('gradient', MAX_WIDTH, MAX_HEIGHT);
+    var texture = self.textures.createCanvas("gradient", MAX_WIDTH, MAX_HEIGHT);
     var grd = texture.context.createLinearGradient(0, 0, MAX_WIDTH, MAX_HEIGHT);
-    grd.addColorStop(0, '#0f0c29');
-    grd.addColorStop(1, '#24243e');
+    grd.addColorStop(0, "#0f0c29");
+    grd.addColorStop(1, "#24243e");
     texture.context.fillStyle = grd;
     texture.context.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
     texture.refresh();
-    self.add.image(MAX_WIDTH/2, MAX_HEIGHT/2, 'gradient');
+    self.add.image(MAX_WIDTH / 2, MAX_HEIGHT / 2, "gradient");
 
     for (var i = 0; i < 10; i++) {
-      var bgstar = self.add.image(getRandomInt(0, 800), getRandomInt(0, 450), 'bgstar');
-      bgstar.alpha = getRandomInt(1, 5)/10;
+      var bgstar = self.add.image(
+        getRandomInt(0, 800),
+        getRandomInt(0, 450),
+        "bgstar"
+      );
+      bgstar.alpha = getRandomInt(1, 5) / 10;
     }
 
     // Ambient music
-    var bgMusic = self.sound.add('void', { volume: 0.2 });
+    var bgMusic = self.sound.add("void", { volume: 0.2 });
     bgMusic.loop = true;
     bgMusic.play();
 
@@ -147,7 +160,7 @@ class GameScene extends Phaser.Scene {
     });
 
     // If it's not desktop we need to add virtual controlling button
-    if (!this.sys.game.device.os.desktop)
+    if (this.sys.game.device.os.desktop)
       this.cursors = this.input.keyboard.createCursorKeys();
     else {
       this.cursors = {
@@ -207,11 +220,21 @@ class GameScene extends Phaser.Scene {
 
     this.socket.on("starLocation", function(starLocation) {
       if (self.star) self.star.destroy();
-      self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-      self.physics.add.overlap(self.ship, self.star, function () {
-        this.socket.emit('starCollected');
-        self.sound.add('collect', { volume: 0.2 }, false, false).play();
-      }, null, self);
+      self.star = self.physics.add.image(
+        starLocation.x,
+        starLocation.y,
+        "star"
+      );
+      self.physics.add.overlap(
+        self.ship,
+        self.star,
+        function() {
+          this.socket.emit("starCollected");
+          self.sound.add("collect", { volume: 0.2 }, false, false).play();
+        },
+        null,
+        self
+      );
     });
   }
 
