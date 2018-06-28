@@ -205,10 +205,10 @@ class GameScene extends Phaser.Scene {
         .setAlpha(0.5)
         .setInteractive()
         .on("pointerdown", function() {
-          self.cursors.up.isDown = !self.cursors.up.isDown;
+          self.cursors.up.isDown = true;
         })
         .on("pointerup", function() {
-          self.cursors.up.isDown = !self.cursors.up.isDown;
+          self.cursors.up.isDown = false;
         });
       this.leftButton = this.add
         .image(50, 400, "leftBtn")
@@ -216,10 +216,10 @@ class GameScene extends Phaser.Scene {
         .setAlpha(0.5)
         .setInteractive()
         .on("pointerdown", function() {
-          self.cursors.left.isDown = !self.cursors.left.isDown;
+          self.cursors.left.isDown = true;
         })
         .on("pointerup", function() {
-          self.cursors.left.isDown = !self.cursors.left.isDown;
+          self.cursors.left.isDown = false;
         });
       this.rightButton = this.add
         .image(125, 400, "rightBtn")
@@ -227,10 +227,10 @@ class GameScene extends Phaser.Scene {
         .setAlpha(0.5)
         .setInteractive()
         .on("pointerdown", function() {
-          self.cursors.right.isDown = !self.cursors.right.isDown;
+          self.cursors.right.isDown = true;
         })
         .on("pointerup", function() {
-          self.cursors.right.isDown = !self.cursors.right.isDown;
+          self.cursors.right.isDown = false;
         });
     }
 
