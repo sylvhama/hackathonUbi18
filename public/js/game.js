@@ -97,14 +97,7 @@ class PreloadScene extends Phaser.Scene {
       self.scene.start("title");
     });
   }
-<<<<<<< HEAD
-  create() {
-    window.addEventListener("resize", resize);
-    resize();
-  }
-=======
   create () {}
->>>>>>> eb40075eb430fca155094927891c8341afc5296f
 }
 
 /*
