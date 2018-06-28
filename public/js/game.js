@@ -217,7 +217,7 @@ class GameScene extends Phaser.Scene {
         } else if (!self.input.pointer1.isDown) {
           if (self.cursors.up.isPointer1) {
             self.cursors.up.isDown = false;
-            self.leftButton.setAlpha(0.5);
+            self.upButton.setAlpha(0.5);
           }
           if (self.cursors.left.isPointer1) {
             self.cursors.left.isDown = false;
@@ -225,12 +225,12 @@ class GameScene extends Phaser.Scene {
           }
           if (self.cursors.right.isPointer1) {
             self.cursors.right.isDown = false;
-            self.leftButton.setAlpha(0.5);
+            self.rightButton.setAlpha(0.5);
           }
         } else {
           if (!self.cursors.up.isPointer1) {
             self.cursors.up.isDown = false;
-            self.leftButton.setAlpha(0.5);
+            self.upButton.setAlpha(0.5);
           }
           if (!self.cursors.left.isPointer1) {
             self.cursors.left.isDown = false;
@@ -238,7 +238,7 @@ class GameScene extends Phaser.Scene {
           }
           if (!self.cursors.right.isPointer1) {
             self.cursors.right.isDown = false;
-            self.leftButton.setAlpha(0.5);
+            self.rightButton.setAlpha(0.5);
           }
         }
       });
