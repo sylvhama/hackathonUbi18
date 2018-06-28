@@ -13,3 +13,23 @@
     font-size: 22px;
   }
 }
+
+.container {
+  position: relative;
+  z-index: 2;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('assets/gamebgx2.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-filter: blur(60px);
+  filter: blur(60px);
+}
