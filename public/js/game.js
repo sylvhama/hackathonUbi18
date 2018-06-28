@@ -205,12 +205,40 @@ class GameScene extends Phaser.Scene {
       };
 
       this.input.on("pointerup", function() {
-        self.cursors.up.isDown = false;
-        self.upButton.setAlpha(0.5);
-        self.cursors.left.isDown = false;
-        self.leftButton.setAlpha(0.5);
-        self.cursors.right.isDown = false;
-        self.rightButton.setAlpha(0.5);
+        if (!self.input.pointer1.isDown && !self.input.pointer2.isDown) {
+          self.cursors.up.isDown = false;
+          self.upButton.setAlpha(0.5);
+          self.cursors.left.isDown = false;
+          self.leftButton.setAlpha(0.5);
+          self.cursors.right.isDown = false;
+          self.rightButton.setAlpha(0.5);
+        } else if (!self.input.pointer1.isDown) {
+          if (self.cursors.up.isPointer1) {
+            self.cursors.up.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+          if (self.cursors.left.isPointer1) {
+            self.cursors.left.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+          if (self.cursors.right.isPointer1) {
+            self.cursors.right.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+        } else {
+          if (!self.cursors.up.isPointer1) {
+            self.cursors.up.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+          if (!self.cursors.left.isPointer1) {
+            self.cursors.left.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+          if (!self.cursors.right.isPointer1) {
+            self.cursors.right.isDown = false;
+            self.leftButton.setAlpha(0.5);
+          }
+        }
       });
 
       this.upButton = this.add
@@ -218,39 +246,41 @@ class GameScene extends Phaser.Scene {
         .setOrigin(0.5, 0.5)
         .setAlpha(0.5)
         .setInteractive()
-        .on("pointerdown", function() {
-          self.cursors.up.isDown = true;
+        .on("pointerdown", function(e) {
+          self.cursors.up = {
+            isDown: true,
+            isPointer1:
+              self.input.pointer1.isDown && !self.input.pointer2.isDown
+          };
           self.upButton.setAlpha(0.8);
-        })
-        .on("pointerup", function() {
-          self.cursors.up.isDown = false;
-          self.upButton.setAlpha(0.5);
         });
+
       this.leftButton = this.add
         .image(50, 400, "leftBtn")
         .setOrigin(0.5, 0.5)
         .setAlpha(0.5)
         .setInteractive()
         .on("pointerdown", function() {
-          self.cursors.left.isDown = true;
+          self.cursors.left = {
+            isDown: true,
+            isPointer1:
+              self.input.pointer1.isDown && !self.input.pointer2.isDown
+          };
           self.leftButton.setAlpha(0.8);
-        })
-        .on("pointerup", function() {
-          self.cursors.left.isDown = false;
-          self.leftButton.setAlpha(0.5);
         });
+
       this.rightButton = this.add
         .image(125, 400, "rightBtn")
         .setOrigin(0.5, 0.5)
         .setAlpha(0.5)
         .setInteractive()
         .on("pointerdown", function() {
-          self.cursors.right.isDown = true;
+          self.cursors.right = {
+            isDown: true,
+            isPointer1:
+              self.input.pointer1.isDown && !self.input.pointer2.isDown
+          };
           self.rightButton.setAlpha(0.8);
-        })
-        .on("pointerup", function() {
-          self.cursors.right.isDown = false;
-          self.rightButton.setAlpha(0.5);
         });
     }
 
