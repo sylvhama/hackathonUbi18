@@ -5,14 +5,17 @@ importScripts(
 if (workbox) {
   console.log(`Yay! Workbox is loaded 🎉`);
 
+  workbox.precaching.precacheAndRoute([
+    '/style.css',
+    '/socket.io/socket.io.js',
+    '//cdn.jsdelivr.net/npm/phaser@3.3.0/dist/phaser.min.js',
+    'js/game.js',
+    { url: '/index.html', revision: '123456' }
+  ]);
+
   workbox.routing.registerRoute(
     new RegExp('^https://fonts.(?:googleapis|gstatic).com/(.*)'),
     workbox.strategies.cacheFirst()
-  );
-
-  workbox.routing.registerRoute(
-    /\.(?:js|css)$/,
-    workbox.strategies.staleWhileRevalidate()
   );
 
   workbox.routing.registerRoute(
