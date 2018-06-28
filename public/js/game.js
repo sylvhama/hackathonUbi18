@@ -244,7 +244,7 @@ class GameScene extends Phaser.Scene {
       });
 
       this.upButton = this.add
-        .image(750, 400, "upBtn")
+        .image(745, 400, "upBtn")
         .setOrigin(0.5, 0.5)
         .setAlpha(0.5)
         .setInteractive()
@@ -258,7 +258,7 @@ class GameScene extends Phaser.Scene {
         });
 
       this.leftButton = this.add
-        .image(50, 400, "leftBtn")
+        .image(55, 400, "leftBtn")
         .setOrigin(0.5, 0.5)
         .setAlpha(0.5)
         .setInteractive()
@@ -272,7 +272,7 @@ class GameScene extends Phaser.Scene {
         });
 
       this.rightButton = this.add
-        .image(125, 400, "rightBtn")
+        .image(130, 400, "rightBtn")
         .setOrigin(0.5, 0.5)
         .setAlpha(0.5)
         .setInteractive()
@@ -287,24 +287,28 @@ class GameScene extends Phaser.Scene {
     }
 
     // Team logo
-    this.blueBanner = this.add.image(25, 30, "blueBanner");
-    this.redBanner = this.add.image(650, 30, "redBanner");
+    this.blueBanner = this.add.image(30, 35, "blueBanner");
+    this.redBanner = this.add.image(655, 35, "redBanner");
 
-    this.blueTeamName = this.add.text(40, 10, "House Arteidus", {
+    this.blueTeamName = this.add.text(50, 12, "House Arteidus", {
       fontSize: "18px",
+      fontFamily: "Markazi Text",
       fill: "#5292CC"
     });
-    this.redTeamName = this.add.text(665, 10, "House Harkonnan", {
+    this.redTeamName = this.add.text(675, 12, "House Harkonnan", {
       fontSize: "18px",
+      fontFamily: "Markazi Text",
       fill: "#D65858"
     });
 
-    this.blueScoreText = this.add.text(40, 26, " ", {
+    this.blueScoreText = this.add.text(50, 25, " ", {
       fontSize: "24px",
+      fontFamily: "Oswald",
       fill: "#FFFFFF"
     });
-    this.redScoreText = this.add.text(665, 26, " ", {
+    this.redScoreText = this.add.text(675, 25, " ", {
       fontSize: "24px",
+      fontFamily: "Oswald",
       fill: "#FFFFFF"
     });
 
