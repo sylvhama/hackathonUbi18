@@ -12,12 +12,16 @@ function resize() {
   var wratio = width / height,
     ratio = canvas.width / canvas.height;
 
-  if (height * ratio > MAX_WIDTH || width / ratio > MAX_HEIGHT) return;
-
-  if (wratio < ratio) {
+  if (width >= MAX_WIDTH && height >= MAX_HEIGHT) {
+    canvas.style.width = MAX_WIDTH + "px";
+    canvas.style.height = MAX_HEIGHT + "px";
+  }
+  else if (wratio < ratio) {
+    if (width > MAX_WIDTH || width / ratio > MAX_HEIGHT) return;
     canvas.style.width = width + "px";
     canvas.style.height = width / ratio + "px";
   } else {
+    if (height * ratio > MAX_WIDTH || height > MAX_HEIGHT) return;
     canvas.style.width = height * ratio + "px";
     canvas.style.height = height + "px";
   }
