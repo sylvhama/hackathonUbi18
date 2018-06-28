@@ -1,4 +1,4 @@
-@media (orientation: portrait) {
+@media (orientation: portrait) and (max-width: 800px) {
   div.landscape {
     position: fixed;
     top: 0;
