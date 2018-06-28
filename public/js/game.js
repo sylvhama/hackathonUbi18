@@ -292,14 +292,14 @@ class GameScene extends Phaser.Scene {
 
     // Team logo
     this.blueBanner = this.add.image(30, 35, "blueBanner");
-    this.redBanner = this.add.image(655, 35, "redBanner");
+    this.redBanner = this.add.image(640, 35, "redBanner");
 
     this.blueTeamName = this.add.text(50, 12, "House Arteidus", {
       fontSize: "18px",
       fontFamily: "Markazi Text",
       fill: "#5292CC"
     });
-    this.redTeamName = this.add.text(675, 12, "House Harkonnan", {
+    this.redTeamName = this.add.text(660, 12, "House Harkonnan", {
       fontSize: "18px",
       fontFamily: "Markazi Text",
       fill: "#D65858"
@@ -310,7 +310,7 @@ class GameScene extends Phaser.Scene {
       fontFamily: "Oswald",
       fill: "#FFFFFF"
     });
-    this.redScoreText = this.add.text(675, 29, " ", {
+    this.redScoreText = this.add.text(660, 29, " ", {
       fontSize: "24px",
       fontFamily: "Oswald",
       fill: "#FFFFFF"
