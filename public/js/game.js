@@ -237,11 +237,15 @@ class GameScene extends Phaser.Scene {
 
     this.socket.on('starLocation', function(starLocation) {
       if (self.star) self.star.destroy();
-      self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-      self.physics.add.overlap(self.ship, self.star, function () {
-        this.socket.emit('starCollected');
-        self.sound.add('collect', { volume: 0.2 }, false, false).play();
-      }, null, self);
+
+      setTimeout(function() {
+        self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
+        self.physics.add.overlap(self.ship, self.star, function () {
+          this.socket.emit('starCollected');
+          self.sound.add('collect', { volume: 0.2 }, false, false).play();
+        }, null, self);
+      }, 500);
+
     });
   }
 
