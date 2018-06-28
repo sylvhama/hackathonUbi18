@@ -15,11 +15,11 @@ function resize() {
   if (height * ratio > MAX_WIDTH || width / ratio > MAX_HEIGHT) return;
 
   if (wratio < ratio) {
-    canvas.style.width = width + 'px';
-    canvas.style.height = width / ratio + 'px';
+    canvas.style.width = width + "px";
+    canvas.style.height = width / ratio + "px";
   } else {
-    canvas.style.width = height * ratio + 'px';
-    canvas.style.height = height + 'px';
+    canvas.style.width = height * ratio + "px";
+    canvas.style.height = height + "px";
   }
 }
 
@@ -31,25 +31,28 @@ function getRandomInt(min, max) {
   PRELOAD SCENE
 */
 class PreloadScene extends Phaser.Scene {
-  constructor () {
-    super({ key: 'preload' });
+  constructor() {
+    super({ key: "preload" });
   }
-  preload () {
-    this.load.image('ship', 'assets/spaceShips_001.png');
-    this.load.image('otherPlayer', 'assets/enemyBlack5.png');
-    this.load.image('star', 'assets/star_gold.png');
-    this.load.image('bgstar', 'assets/star.png');
-    this.load.image('screenbg', 'assets/screenbg.jpg');
-    this.load.audio('collect', 'assets/audio/collect.wav');
-    this.load.audio('void', 'assets/audio/void.mp3');
-    this.load.audio('intro', 'assets/audio/intro.wav');
-    this.load.audio('validate', 'assets/audio/validate.wav');
+  preload() {
+    this.load.image("ship", "assets/spaceShips_001.png");
+    this.load.image("otherPlayer", "assets/enemyBlack5.png");
+    this.load.image("star", "assets/star_gold.png");
+    this.load.image("bgstar", "assets/star.png");
+    this.load.image("screenbg", "assets/screenbg.jpg");
+    this.load.audio("collect", "assets/audio/collect.wav");
+    this.load.audio("void", "assets/audio/void.mp3");
+    this.load.audio("intro", "assets/audio/intro.wav");
+    this.load.audio("validate", "assets/audio/validate.wav");
+    this.load.image("upBtn", "assets/rocket.png");
+    this.load.image("leftBtn", "assets/left_arrow.png");
+    this.load.image("rightBtn", "assets/right_arrow.png");
   }
-  create () {
-    window.addEventListener('resize', resize);
+  create() {
+    window.addEventListener("resize", resize);
     resize();
     // FIXME: create preloading screen
-    this.scene.start('title');
+    this.scene.start("title");
   }
 }
 
@@ -57,26 +60,35 @@ class PreloadScene extends Phaser.Scene {
   TITLE SCENE (menu)
 */
 class TitleScene extends Phaser.Scene {
-  constructor () {
-    super({ key: 'title' });
+  constructor() {
+    super({ key: "title" });
   }
-  preload () {}
-  create () {
+  preload() {}
+  create() {
     resize();
-    this.sound.add('intro', { volume: 0.2 }, false, false).play();
-    this.add.sprite(MAX_WIDTH/2, MAX_HEIGHT/2, 'screenbg');
-    var helloText = this.add.text(MAX_WIDTH/4, (MAX_HEIGHT-120), 'Click or tap to play', {
-      fontSize: '32px',
-      fill: '#c0a04d'
-    });
-    this.input.once('pointerdown', function (event) {
-      this.sound.add('validate', { volume: 0.3 }, false, false).play();
-      // FIXME: figure out how to use transitions...
-      var self = this;
-      setTimeout(function () {
-        self.scene.start('game');
-      }, 500);
-    }, this);
+    this.sound.add("intro", { volume: 0.2 }, false, false).play();
+    this.add.sprite(MAX_WIDTH / 2, MAX_HEIGHT / 2, "screenbg");
+    var helloText = this.add.text(
+      MAX_WIDTH / 4,
+      MAX_HEIGHT - 120,
+      "Click or tap to play",
+      {
+        fontSize: "32px",
+        fill: "#c0a04d"
+      }
+    );
+    this.input.once(
+      "pointerdown",
+      function(event) {
+        this.sound.add("validate", { volume: 0.3 }, false, false).play();
+        // FIXME: figure out how to use transitions...
+        var self = this;
+        setTimeout(function() {
+          self.scene.start("game");
+        }, 500);
+      },
+      this
+    );
   }
 }
 
@@ -84,39 +96,43 @@ class TitleScene extends Phaser.Scene {
   GAME SCENE
 */
 class GameScene extends Phaser.Scene {
-  constructor () {
-    super({ key: 'game' });
+  constructor() {
+    super({ key: "game" });
   }
-  preload () {}
+  preload() {}
   create() {
     resize();
 
     var self = this;
 
     // Gradient background
-    var texture = self.textures.createCanvas('gradient', MAX_WIDTH, MAX_HEIGHT);
+    var texture = self.textures.createCanvas("gradient", MAX_WIDTH, MAX_HEIGHT);
     var grd = texture.context.createLinearGradient(0, 0, MAX_WIDTH, MAX_HEIGHT);
-    grd.addColorStop(0, '#0f0c29');
-    grd.addColorStop(1, '#24243e');
+    grd.addColorStop(0, "#0f0c29");
+    grd.addColorStop(1, "#24243e");
     texture.context.fillStyle = grd;
     texture.context.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
     texture.refresh();
-    self.add.image(MAX_WIDTH/2, MAX_HEIGHT/2, 'gradient');
+    self.add.image(MAX_WIDTH / 2, MAX_HEIGHT / 2, "gradient");
 
     for (var i = 0; i < 10; i++) {
-      var bgstar = self.add.image(getRandomInt(0, 800), getRandomInt(0, 450), 'bgstar');
-      bgstar.alpha = getRandomInt(1, 5)/10;
+      var bgstar = self.add.image(
+        getRandomInt(0, 800),
+        getRandomInt(0, 450),
+        "bgstar"
+      );
+      bgstar.alpha = getRandomInt(1, 5) / 10;
     }
 
     // Ambient music
-    var bgMusic = self.sound.add('void', { volume: 0.2 });
+    var bgMusic = self.sound.add("void", { volume: 0.2 });
     bgMusic.loop = true;
     bgMusic.play();
 
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
-    this.socket.on('currentPlayers', function (players) {
-      Object.keys(players).forEach(function (id) {
+    this.socket.on("currentPlayers", function(players) {
+      Object.keys(players).forEach(function(id) {
         if (players[id].playerId === self.socket.id) {
           self.addPlayer(self, players[id]);
         } else {
@@ -124,47 +140,110 @@ class GameScene extends Phaser.Scene {
         }
       });
     });
-    this.socket.on('newPlayer', function (playerInfo) {
+    this.socket.on("newPlayer", function(playerInfo) {
       self.addOtherPlayers(self, playerInfo);
     });
-    this.socket.on('disconnect', function (playerId) {
-      self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+    this.socket.on("disconnect", function(playerId) {
+      self.otherPlayers.getChildren().forEach(function(otherPlayer) {
         if (playerId === otherPlayer.playerId) {
           otherPlayer.destroy();
         }
       });
     });
-    this.socket.on('playerMoved', function (playerInfo) {
-      self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+    this.socket.on("playerMoved", function(playerInfo) {
+      self.otherPlayers.getChildren().forEach(function(otherPlayer) {
         if (playerInfo.playerId === otherPlayer.playerId) {
           otherPlayer.setRotation(playerInfo.rotation);
           otherPlayer.setPosition(playerInfo.x, playerInfo.y);
         }
       });
     });
-    this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });
-    this.redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#FF0000' });
+    // If it's not desktop we need to add virtual controlling button
+    if (this.sys.game.device.os.desktop)
+      this.cursors = this.input.keyboard.createCursorKeys();
+    else {
+      this.cursors = {
+        left: { isDown: false },
+        right: { isDown: false },
+        up: { isDown: false }
+      };
 
-    this.socket.on('scoreUpdate', function (scores) {
-      self.blueScoreText.setText('Blue: ' + scores.blue);
-      self.redScoreText.setText('Red: ' + scores.red);
+      this.upButton = this.add
+        .image(750, 400, "upBtn")
+        .setOrigin(0.5, 0.5)
+        .setAlpha(0.5)
+        .setInteractive()
+        .on("pointerdown", function() {
+          self.cursors.up.isDown = !self.cursors.up.isDown;
+        })
+        .on("pointerup", function() {
+          self.cursors.up.isDown = !self.cursors.up.isDown;
+        });
+      this.leftButton = this.add
+        .image(50, 400, "leftBtn")
+        .setOrigin(0.5, 0.5)
+        .setAlpha(0.5)
+        .setInteractive()
+        .on("pointerdown", function() {
+          self.cursors.left.isDown = !self.cursors.left.isDown;
+        })
+        .on("pointerup", function() {
+          self.cursors.left.isDown = !self.cursors.left.isDown;
+        });
+      this.rightButton = this.add
+        .image(125, 400, "rightBtn")
+        .setOrigin(0.5, 0.5)
+        .setAlpha(0.5)
+        .setInteractive()
+        .on("pointerdown", function() {
+          self.cursors.right.isDown = !self.cursors.right.isDown;
+        })
+        .on("pointerup", function() {
+          self.cursors.right.isDown = !self.cursors.right.isDown;
+        });
+    }
+
+    this.blueScoreText = this.add.text(16, 16, "", {
+      fontSize: "32px",
+      fill: "#0000FF"
+    });
+    this.redScoreText = this.add.text(584, 16, "", {
+      fontSize: "32px",
+      fill: "#FF0000"
     });
 
-    this.socket.on('starLocation', function (starLocation) {
+    this.socket.on("scoreUpdate", function(scores) {
+      self.blueScoreText.setText("Blue: " + scores.blue);
+      self.redScoreText.setText("Red: " + scores.red);
+    });
+
+    this.socket.on("starLocation", function(starLocation) {
       if (self.star) self.star.destroy();
-      self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-      self.physics.add.overlap(self.ship, self.star, function () {
-        this.socket.emit('starCollected');
-        self.sound.add('collect', { volume: 0.2 }, false, false).play();
-      }, null, self);
+      self.star = self.physics.add.image(
+        starLocation.x,
+        starLocation.y,
+        "star"
+      );
+      self.physics.add.overlap(
+        self.ship,
+        self.star,
+        function() {
+          this.socket.emit("starCollected");
+          self.sound.add("collect", { volume: 0.2 }, false, false).play();
+        },
+        null,
+        self
+      );
     });
   }
 
   addPlayer(self, playerInfo) {
-    self.ship = self.physics.add.image(playerInfo.x, playerInfo.y, 'ship').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-    if (playerInfo.team === 'blue') {
+    self.ship = self.physics.add
+      .image(playerInfo.x, playerInfo.y, "ship")
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(53, 40);
+    if (playerInfo.team === "blue") {
       self.ship.setTint(0x0000ff);
     } else {
       self.ship.setTint(0xff0000);
@@ -175,8 +254,11 @@ class GameScene extends Phaser.Scene {
   }
 
   addOtherPlayers(self, playerInfo) {
-    const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'otherPlayer').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-    if (playerInfo.team === 'blue') {
+    const otherPlayer = self.add
+      .sprite(playerInfo.x, playerInfo.y, "otherPlayer")
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(53, 40);
+    if (playerInfo.team === "blue") {
       otherPlayer.setTint(0x0000ff);
     } else {
       otherPlayer.setTint(0xff0000);
@@ -196,7 +278,11 @@ class GameScene extends Phaser.Scene {
       }
 
       if (this.cursors.up.isDown) {
-        this.physics.velocityFromRotation(this.ship.rotation + 1.5, 100, this.ship.body.acceleration);
+        this.physics.velocityFromRotation(
+          this.ship.rotation + 1.5,
+          100,
+          this.ship.body.acceleration
+        );
       } else {
         this.ship.setAcceleration(0);
       }
@@ -207,8 +293,17 @@ class GameScene extends Phaser.Scene {
       var x = this.ship.x;
       var y = this.ship.y;
       var r = this.ship.rotation;
-      if (this.ship.oldPosition && (x !== this.ship.oldPosition.x || y !== this.ship.oldPosition.y || r !== this.ship.oldPosition.rotation)) {
-        this.socket.emit('playerMovement', { x: this.ship.x, y: this.ship.y, rotation: this.ship.rotation });
+      if (
+        this.ship.oldPosition &&
+        (x !== this.ship.oldPosition.x ||
+          y !== this.ship.oldPosition.y ||
+          r !== this.ship.oldPosition.rotation)
+      ) {
+        this.socket.emit("playerMovement", {
+          x: this.ship.x,
+          y: this.ship.y,
+          rotation: this.ship.rotation
+        });
       }
       // save old position data
       this.ship.oldPosition = {
@@ -222,22 +317,18 @@ class GameScene extends Phaser.Scene {
 
 var config = {
   type: Phaser.AUTO,
-  parent: 'root',
+  parent: "root",
   width: MAX_WIDTH,
   height: MAX_HEIGHT,
   physics: {
-    default: 'arcade',
+    default: "arcade",
     arcade: {
       debug: false,
       gravity: { y: 0 }
     }
   },
-  scene: [
-    PreloadScene,
-    TitleScene,
-    GameScene
-  ]
+  scene: [PreloadScene, TitleScene, GameScene]
 };
 
 var game = new Phaser.Game(config);
-game.scene.start('preload');
+game.scene.start("preload");
