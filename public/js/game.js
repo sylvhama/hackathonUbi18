@@ -38,19 +38,19 @@ class PreloadScene extends Phaser.Scene {
     window.addEventListener("resize", resize);
     resize();
 
-    this.load.image('ship', 'assets/playership.png');
-    this.load.image('otherPlayer', 'assets/enemyship.png');
-    this.load.image('star', 'assets/spice.png');
-    this.load.image('titlebg', 'assets/screenbg.jpg');
-    this.load.image('gamebg', 'assets/gamebg.jpg');
-    this.load.image('upBtn', 'assets/rocket.png');
-    this.load.image('leftBtn', 'assets/left_arrow.png');
-    this.load.image('rightBtn', 'assets/right_arrow.png');
-    this.load.audio('collect', 'assets/audio/collect.mp3');
-    this.load.audio('void', 'assets/audio/void.mp3');
-    this.load.audio('intro', 'assets/audio/intro.mp3');
-    this.load.audio('validate', 'assets/audio/validate.mp3');
-    this.load.audio('engine', 'assets/audio/engine.mp3');
+    this.load.image("ship", "assets/playership.png");
+    this.load.image("otherPlayer", "assets/enemyship.png");
+    this.load.image("star", "assets/spice.png");
+    this.load.image("titlebg", "assets/screenbg.jpg");
+    this.load.image("gamebg", "assets/gamebg.jpg");
+    this.load.image("upBtn", "assets/control-forward.png");
+    this.load.image("leftBtn", "assets/control-left.png");
+    this.load.image("rightBtn", "assets/control-right.png");
+    this.load.audio("collect", "assets/audio/collect.mp3");
+    this.load.audio("void", "assets/audio/void.mp3");
+    this.load.audio("intro", "assets/audio/intro.mp3");
+    this.load.audio("validate", "assets/audio/validate.mp3");
+    this.load.audio("engine", "assets/audio/engine.mp3");
 
     var progressBar = this.add.graphics();
     var progressBox = this.add.graphics();
