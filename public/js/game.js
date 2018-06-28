@@ -147,7 +147,7 @@ class GameScene extends Phaser.Scene {
     });
 
     // If it's not desktop we need to add virtual controlling button
-    if (!this.sys.game.device.os.desktop)
+    if (this.sys.game.device.os.desktop)
       this.cursors = this.input.keyboard.createCursorKeys();
     else {
       this.cursors = {
